@@ -1,0 +1,65 @@
+package bit.com.a;
+
+import java.util.Date;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+
+import bit.com.a.model.MyClass;
+
+@Controller
+public class HelloController {
+	
+	private static final Logger logger = LoggerFactory.getLogger(HelloController.class);
+	
+	@RequestMapping(value="hello.do", method=RequestMethod.GET)
+	public String hello(Model model) {	// session에 접근할 때 request를 쓴다.
+		logger.info("HelloController hello()");
+		
+		MyClass cls = new MyClass();
+		cls.setNumber(1001);
+		cls.setName("뽀로로");
+		
+		model.addAttribute("mycls", cls);
+
+		return "hello";	// .jsp
+	}
+	
+	/* 2 */										// get, post 둘다 받아들임
+	@RequestMapping(value = "inputData.do", method= {RequestMethod.GET, RequestMethod.POST})
+	public String inputData(Model model, MyClass mycls) {	// model : 데이터를 가지고 가는 용도(날려주는), MyClass형태로 받는다.
+		logger.info("HelloController inputData()" + new Date());
+		
+		logger.info(mycls.toString());
+		
+		model.addAttribute("mycls", mycls);
+		
+		return "hello";
+	}
+	
+	/* 3 */
+	@RequestMapping(value = "move.do", method= {RequestMethod.GET, RequestMethod.POST})
+	public String move() {
+		logger.info("HelloController move()" + new Date());
+		
+		//return "redirect:/hello.do";	// controller에서 controller로 이동
+		return "forward:/hello.do";	// 짐을 싸고 이동할 떈.(값을 가지고 감) 대부분 redirect를 많이 씀
+	}
+	
+	/* 4 */
+	@RequestMapping(value = "idcheck.do", method= {RequestMethod.GET, RequestMethod.POST})
+	public String idcheck(String id) {
+		logger.info("HelloController idcheck()" + new Date());
+		logger.info("id" + id);
+		
+		String str = "OK";
+		
+		return "";
+		
+	}
+	
+}

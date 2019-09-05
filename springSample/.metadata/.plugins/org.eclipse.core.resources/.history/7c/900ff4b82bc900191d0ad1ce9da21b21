@@ -1,0 +1,6 @@
+package aopex;
+
+// 감시자
+public class logAOP {
+
+}

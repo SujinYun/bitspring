@@ -1,0 +1,16 @@
+
+
+/*//////////////////////////////////////////////////////////////////
+[ 이미지 미리보기 내가 넣은 것  by shy]*/
+
+.img_wrap img{
+	margin-left:10px;
+	margin-bottom:10px;
+	display: block;
+	width:200px;
+	height:200px;
+	border-radius:10%;
+	border:4px #fff solid;
+	text-align:"center"
+	
+}

@@ -1,0 +1,26 @@
+package bit.com.a.dao.impl;
+
+import java.util.List;
+
+import org.apache.ibatis.session.SqlSession;
+import org.springframework.beans.factory.annotation.Autowired;
+
+import bit.com.a.dao.BitBbsDao;
+import bit.com.a.model.BbsDto;
+
+public class BitBbsDaoImpl implements BitBbsDao {
+	
+	@Autowired
+	SqlSession sqlSession;
+
+	String namespace = "Member.";
+
+	@Override
+	public List<BbsDto> bbslist() throws Exception {
+		List<BbsDto> bdto = sqlSession.selectList(namespace + "bbslist");
+		return bdto;
+	}
+	
+	
+	
+}

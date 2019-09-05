@@ -1,0 +1,17 @@
+package bit.com.a.model;
+
+import java.io.Serializable;
+
+public class AccountDto implements Serializable {
+	
+	private String id;
+	private String pwd;
+	private String name;
+	private String tel;
+	private String email;
+
+	public AccountDto() {
+		// TODO Auto-generated constructor stub
+	}
+	
+}

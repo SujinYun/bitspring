@@ -1,0 +1,49 @@
+package bit.com.a.model;
+
+import java.io.Serializable;
+
+import lombok.Getter;
+import lombok.Setter;
+import lombok.ToString;
+
+/*
+ 
+DROP TABLE MEMBER
+CASCADE CONSTRAINTS;
+
+CREATE TABLE MEMBER(
+	ID VARCHAR2(50) PRIMARY KEY,
+	PWD VARCHAR2(50) NOT NULL,
+	NAME VARCHAR2(50) NOT NULL,
+	EMAIL VARCHAR2(50) UNIQUE,
+	AUTH NUMBER(1) NOT NULL
+);
+
+*/
+@Getter
+@Setter
+@ToString
+public class MemberDto implements Serializable {
+	
+	private String id;
+	private String pwd;
+	private String name;
+	private String email;
+	private int auth;		// 사용자(3)/관리자(1)
+	
+	public MemberDto() {}
+
+	public MemberDto(String id, String pwd, String name, String email, int auth) {
+		super();
+		this.id = id;
+		this.pwd = pwd;
+		this.name = name;
+		this.email = email;
+		this.auth = auth;
+	}
+
+	
+	
+	
+	
+}

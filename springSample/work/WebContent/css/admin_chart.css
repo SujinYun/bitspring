@@ -1,0 +1,144 @@
+@charset "UTF-8";
+.nullList{
+	position: relative;top: 130px;left: -183px;padding-bottom: 1000px;
+}
+#back1_red{
+/* 	background-color: red; */width: 256px;height : 1000px;float: left; position: relative; top: 100px;
+}
+#back2_yellow{
+/* 	background-color: yellow; */width: 700px;height : 1300px;float: left;position: relative;left: 90px;top: 45px;	
+}
+.middle_box2{
+	width: 250px;height: 200px;background-color: white;border-radius: 4px;float: left;font-family: monospace;
+}
+.move{
+	padding-left: 20px;padding-right: 30px;
+}
+.scheduleArr{
+	padding-left: 200px;padding-top: 50px;width: 500px;float: left;
+}
+#_img1{
+	filter : grayscale(100%);width: auto; height: auto;width: 250px;height: 150px;
+}
+#_img2{
+	width: auto; height: auto;width: 250px;height: 150px;
+}
+#_userList{
+	color: #4c4c4c;
+}
+#_userList:hover{
+	color : #04e8ba;
+}
+#updateBtn{
+	background-color: #04e8ba;border-radius: 5px;border: none;padding-left: 10px;padding-right: 10px;
+    padding-top: 2px;padding-bottom: 2px;color: #fff;position: relative;left: 167px;
+}
+#_schedule:hover {
+	color: #04e8ba;
+}
+#_schedule {
+	color: #4C4C4C;
+}
+.Anotice{
+	color: #4C4C4C; 
+}
+.Anotice:hover{
+	color: #04e8ba;
+}
+.Aqna{
+	color: #4C4C4C;
+}
+.Aqna:hover{
+	color: #04e8ba;
+}
+#_chart{
+	color:#4c4c4c;
+}
+#_chart:hover{
+	color:#04e8ba;
+}
+#_del{
+	color: #5D5D5D;padding-bottom: 240px;
+}
+.schedule{
+	padding-bottom: 180px;
+}
+.play_ing{
+	padding-left: 20px;padding-right: 30px;width: 250px;height: 150px;
+}
+.playlist{
+	font-family: sans-serif;padding-left: 20px;padding-right: 30px;padding-bottom : 50px;width: 500px;	
+}
+.w3-button{
+	font-family: sans-serif;background-color: #fff;
+}
+.w3-button:hover{
+	background-color: #04e8ba;color: #fff;
+}
+.w3-hide {
+    font-family: sans-serif;padding-left: 30px;
+}
+.pagenumber{
+	position: relative;
+    top: 628px;
+    left: -59px;
+}
+}
+#about{
+	font-size: x-small;
+}
+#_name{
+	font-size: large;font-weight: bold;position: relative;left: 31px;top: -8px;
+}
+#_introduction{
+	color: gray;
+}
+.table{
+	border: solid;
+	border-collapse: separate;
+	border-spacing: 0;
+}
+.out{
+	position: relative;
+	left: 658px;
+    top: 24px;
+    background-color: #04e8ba;
+    color: white;
+    border-radius: 5px;border: none;
+}
+.ifDel_1{
+	background-color: #b1b1b1;
+    color: #7d7d7d;
+}
+.listsize{
+	position : relative;
+	left:1px;
+	color: red;
+}
+.searchText{
+
+}
+.idsize{
+	width:1px;
+}
+.frm{
+
+}
+#_bbslist:hover{
+	color : #04e8ba;
+}
+#_bbslist{
+	color : #4C4C4C;
+}
+a{
+	text-decoration:none;
+}
+#_chart{
+	color: #04e8ba;font-weight: bold;
+}
+.Aplay{
+	color:#4c4c4c;
+}
+.Aplay:hover {
+	color : #04e8ba;
+}

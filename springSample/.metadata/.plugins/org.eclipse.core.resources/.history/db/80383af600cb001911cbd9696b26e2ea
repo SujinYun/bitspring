@@ -1,0 +1,12 @@
+package bit.com.a.service;
+
+import java.util.Calendar;
+
+import bit.com.a.model.BbsDto;
+
+public interface BitCalService {
+	
+	// calendar
+	public Calendar getCal(BbsDto bbs);
+
+}

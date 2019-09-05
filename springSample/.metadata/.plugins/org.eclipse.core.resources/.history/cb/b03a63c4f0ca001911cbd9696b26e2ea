@@ -1,0 +1,7 @@
+package bit.com.a.dao.impl;
+
+import java.io.Serializable;
+
+public class BitCalendarDaoImpl implements Serializable {
+
+}

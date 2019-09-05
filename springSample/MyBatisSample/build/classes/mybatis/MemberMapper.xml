@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+  
+<mapper namespace="mybatis.MemberMapper">
+
+<insert id="add" parameterType="dto.MemberDto">
+	INSERT INTO MEMBERDTO(ID, PWD, EMAIL)
+	VALUES(#{id}, #{pwd}, #{email})
+</insert>
+
+<delete id="remove" parameterType="java.lang.String">
+	DELETE FROM MEMBERDTO
+	WHERE ID=#{id}
+</delete>
+
+<!-- Object로 들어왔을 땐 #{id}이름이 같아됨 -->
+<delete id="removeobj" parameterType="dto.MemberDto">
+	DELETE FROM MEMBERDTO
+	WHERE ID=#{id}
+</delete>
+
+<update id="update" parameterType="dto.MemberDto">
+	UPDATE MEMBERDTO
+	SET ID=#{id}
+	WHERE PWD=#{pwd}
+</update>
+
+<select id="find" parameterType="java.lang.String" 
+	resultType="dto.MemberDto">
+	SELECT * FROM MEMBERDTO
+	WHERE ID=#{id}
+</select>
+
+<select id="alllist" resultType="dto.MemberDto">
+	SELECT ID, PWD, EMAIL
+	FROM MEMBERDTO
+</select>
+
+<select id="search" parameterType="dto.BbsParam"
+	resultType="dto.BbsDto">
+	SELECT *
+	FROM BBS
+	WHERE 1=1	<!-- 조건이 안맞을수도 있기 때문에 임의로 조건을 줌 -->
+	<if test="s_category == 'title'">
+		AND TITLE LIKE '%'||#{keyword}||'%'		<!-- oracle에서 하나의 문자열로 만들어 줄 때 || -->
+	</if>
+	<if test="s_category == 'content'">
+		AND TITLE LIKE '%'||#{content}||'%'		<!-- oracle에서 하나의 문자열로 만들어 줄 때 || -->
+	</if>
+</select>
+
+</mapper>

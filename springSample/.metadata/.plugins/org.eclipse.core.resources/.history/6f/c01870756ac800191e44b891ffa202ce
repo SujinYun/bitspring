@@ -1,0 +1,5 @@
+package bit.com.a.service.impl;
+
+public class BitBbsServiceImpl implements bit.com.a.service.BitBbsService {
+
+}

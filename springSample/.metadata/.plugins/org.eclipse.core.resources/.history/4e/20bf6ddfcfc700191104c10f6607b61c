@@ -1,0 +1,11 @@
+package bit.com.a.dao;
+
+import bit.com.a.model.MemberDto;
+
+public interface BitMemberDao {
+
+	public boolean addmember(bit.com.a.model.MemberDto mem)throws Exception;
+	
+	public boolean idcheck(MemberDto mem)throws Exception;
+	
+}

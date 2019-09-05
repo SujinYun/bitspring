@@ -1,0 +1,131 @@
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+    pageEncoding="UTF-8"%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%> 
+    
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>bbsdetail.jsp</title>
+
+<style type="text/css">
+table.type01 {
+    border-collapse: collapse;
+    text-align: left;
+    line-height: 1.5;
+    margin : 20px 10px;
+}
+table.type01 th {
+    /* width: 150px; */
+    padding: 10px;
+    font-weight: bold;
+    vertical-align: top;
+    border: 1px solid #ccc;
+    text-align: center;
+}
+table.type01 td {
+    /* width: 350px; */
+    padding: 10px;
+    vertical-align: top;
+    border: 1px solid #ccc;
+}
+button{
+	background-color: white;
+}
+a{
+	text-decoration: none; color: blue;
+}
+</style>
+
+
+</head>
+<body>
+
+<h1>상세 글 보기</h1>
+
+<div align="center">
+
+<table border="1" class="type01">
+<col width="150"><col width="600">
+
+<tr>
+	<th>작성자</th>
+	<td>${bbs.id }</td>
+</tr>
+
+<tr>
+	<th>제목</th>
+	<td>${bbs.title }</td>
+</tr>
+
+<tr>
+	<th>작성일</th>
+	<td>${bbs.wdate }</td>
+</tr>
+
+<tr>
+	<th>조회수</th>
+	<td>${bbs.readcount }</td>
+</tr>
+
+<tr>
+	<th>정보</th>
+	<td>${bbs.ref }-${bbs.step }-${bbs.depth }</td>
+</tr>
+<tr>
+	<th>내용</th>
+<td align="center">
+<textarea rows="10" cols="90" readonly="readonly"
+>${bbs.content }</textarea>
+</td>
+</tr>
+
+</table>
+
+
+<table>
+<col width="50"><col width="300"><col width="300">
+<tr>
+	<td>
+		<button type="button" onclick="bbsanswer2('${bbs.seq }')">댓글</button>
+	</td>
+	<td>
+		<button type="button" onclick="bbsanswer2('${bbs.seq }')">댓글</button>
+	</td>
+	<td>
+		<c:if test="${bbs.id eq login.id}">
+			<button type="button" onclick="deleteBbs('${bbs.seq }')">삭제</button>
+			<button type="button" onclick="updateBbs('${bbs.seq }')">수정</button>
+		</c:if>		
+	</td>
+</tr>
+</table>
+
+
+</div>
+
+<a href="bbslist.do">글목록</a>
+
+<script type="text/javascript">
+function updateBbs( seq ) {
+	location.href = "bbsanswer.do?seq=" + seq;	// 답글
+}
+function deleteBbs( seq ) {
+	location.href = "bbsdelete.do?seq=" + seq;	// 삭제
+}
+function updateBbs( seq ) {
+	location.href = "bbsupdate.do?seq=" + seq;	// 수정
+}
+</script>
+
+</body>
+</html>
+
+
+
+
+
+
+
+
+

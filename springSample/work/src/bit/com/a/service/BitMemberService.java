@@ -1,0 +1,12 @@
+package bit.com.a.service;
+
+import org.springframework.beans.factory.annotation.Autowired;
+
+import bit.com.a.model.MemberDto;
+
+public interface BitMemberService {
+
+	boolean addmember(MemberDto mem) throws Exception;
+
+
+}

@@ -1,0 +1,15 @@
+package bit.com.a.dao;
+
+import java.util.List;
+import java.util.Map;
+
+import bit.com.a.model.BbsDto;
+
+public interface BitBbsDao {
+	
+	// 모든 리스트
+	public List<BbsDto> getBbsList(); 
+	
+	
+	
+}

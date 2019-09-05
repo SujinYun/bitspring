@@ -1,0 +1,38 @@
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+    pageEncoding="UTF-8"%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+
+<!-- 검색 -->
+
+<!-- arrow 생성 -->
+<jsp:useBean id="ubbs" class="bit.com.a.util.BbsArrow"/>
+
+<!-- 글목록 -->
+<table class="list_table" style="width: 85%">
+<colgroup>
+	<col style="width: 70px"> 	<!-- 번호 -->
+	<col style="width: auto">	<!-- 제목 -->
+	<col style="width: 100px">	<!-- 작성자 -->
+</colgroup>
+
+<thead>
+	<tr>
+		<th>번호</th><th>제목</th><th>작성자</th>
+	</tr>
+</thead>
+
+<tbody>
+	<c:if test="${empty bbslist }">
+		<tr>
+				<td colspan="3">작성된 글이 없습니다.</td>
+		</tr>
+	</c:if>
+</tbody>
+
+</table>
+
+<!-- 페이징 -->
+
+<script type="text/javascript">
+
+</script>

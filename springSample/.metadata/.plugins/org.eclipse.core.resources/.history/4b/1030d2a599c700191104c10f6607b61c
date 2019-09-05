@@ -1,0 +1,33 @@
+package bit.com.a;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+
+import bit.com.a.model.MyClass;
+
+@Controller
+public class HelloController {
+	
+	private static final Logger logger = LoggerFactory.getLogger(HelloController.class);
+	
+	@RequestMapping(value="hello.do", method=RequestMethod.GET)
+	public String hello(Model model) {	// session에 접근할 때 request를 쓴다.
+		logger.info("HelloController hello()");
+		
+		MyClass cls = new MyClass();
+		cls.setNumber(1001);
+		cls.setName("뽀로로");
+		
+		model.addAttribute("mycls", cls);
+		
+		
+		
+		return "hello";	// .jsp
+	}
+
+
+}

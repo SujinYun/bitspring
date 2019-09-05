@@ -1,0 +1,20 @@
+package bit.com.a.service;
+
+import java.util.List;
+import java.util.Map;
+
+import bit.com.a.model.BbsDto;
+
+public interface BitBbsService {
+
+	public List<BbsDto> getBbsList();
+	
+	// 글쓰기
+	public boolean getBbsWrite(BbsDto bbs);
+	
+	// detail
+	public BbsDto getBbsDetail(int seq);
+	
+	public boolean getBbsupdateAf(Map<String, Object> map);
+	
+}

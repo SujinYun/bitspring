@@ -1,0 +1,51 @@
+package bit.com.a;
+
+import java.util.Date;
+
+import javax.servlet.http.HttpServletRequest;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.ResponseBody;
+
+import bit.com.a.model.MemberDto;
+import bit.com.a.service.BitMemberService;
+import bit.com.a.service.impl.BitMemberServiceImpl;
+
+
+@Controller
+public class BbsController {
+	
+	private static final Logger logger = LoggerFactory.getLogger(BbsController.class);
+	
+	@Autowired	// 서비스가 생성, 서비스에선 다오가 생성. 서로 연결해주는것
+	private BitMemberService bitMemberService;
+
+	
+	// 로그인 id, pwd확인
+	@ResponseBody
+	@RequestMapping(value="loginAf.do",
+					produces="application/String; charset=utf-8",
+					method= RequestMethod.POST)
+	public String loginCheck(MemberDto dto, Model model, HttpServletRequest req)throws Exception {
+		logger.info("BbsController loginCheck()"+new Date());
+		logger.info(dto.toString());
+		
+		int b = bitMemberService.logincheck(dto);
+		if(b == 0) {
+			logger.info("id 또는 비밀번호 오류" + new Date());
+			
+			return "bbsLogin";
+		}else {
+			logger.info("로그인 성공" + new Date());
+			
+			return "bbslist";
+		}
+	}
+
+}

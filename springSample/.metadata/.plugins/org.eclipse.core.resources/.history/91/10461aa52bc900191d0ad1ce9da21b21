@@ -1,0 +1,5 @@
+package aopex;
+
+public class logAOP {
+
+}

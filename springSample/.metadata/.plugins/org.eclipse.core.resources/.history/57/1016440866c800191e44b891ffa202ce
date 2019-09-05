@@ -1,0 +1,261 @@
+<%@page import="java.util.List"%>
+<%@page import="dao.BbsDao"%>
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+    pageEncoding="UTF-8"%>
+<%!
+// 이게 없으면 코드가 길어짐
+
+// 댓글용 함수
+public String arrow(int depth){	// arrow : 댓글의 화살표 이미지
+	String rs = "<img src='./image/arrow.png' width='20' height='20px'/>";
+	String nbsp = "&nbsp;&nbsp;&nbsp;&nbsp;";	// 여백
+	
+	String ts = "";
+	for(int i=0; i<depth; i++){
+		ts += nbsp;
+	}
+	return depth==0?"":ts + rs;	// 여백 + 화살표이미지
+	
+}
+
+%>    
+ 
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+<script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
+<style type="text/css">
+body{
+	font-family: Times new Roman;
+}
+#goSearch{
+	background-color: white;
+}
+#_write:link{
+	color:#000000;
+}
+#_write:visited {
+	color:#000000;
+}
+#_write:active {
+	color:#ffffff;
+}
+table.type02 {
+    border-collapse: separate;
+    border-spacing: 0;
+    text-align: left;
+    line-height: 1.0;
+    border-top: 1px solid #ccc;
+    border-left: 1px solid #ccc;
+  	margin : 20px 10px;
+}
+table.type02 th {
+    /* width: 150px; */
+    padding: 10px;
+    font-weight: bold;
+    vertical-align: top;
+    border-right: 1px solid #ccc;
+    border-bottom: 1px solid #ccc;
+    border-top: 1px solid #fff;
+    border-left: 1px solid #fff;
+    background: #eee;
+    text-align: center;
+}
+table.type02 td {
+    /* width: 350px; */
+    padding: 10px;
+    vertical-align: top;
+    border-right: 1px solid #ccc;
+    border-bottom: 1px solid #ccc;
+}
+
+</style>
+</head>
+<body>
+
+<%
+Object ologin = session.getAttribute("login");
+MemberDto mem = null;
+if(ologin == null){
+	%>
+	<script type="text/javascript">
+	alert("로그인해 주십시오");
+	location.href = "login.jsp";
+	</script>
+	<%
+}
+mem = (MemberDto)ologin;
+%>
+
+<%
+iBbsDao dao = BbsDao.getInstance();
+
+List<BbsDto> list = dao.getBbsList();
+
+%>
+
+<h4 align="right" style="background-color: #f0f0f0">환영합니다. <%=mem.getId() %>님 환영합니다.</h4>
+
+<h1 id="_main">게시판</h1>
+<ul>
+	<li>
+		<a href="./calendar.jsp">일정관리</a>
+	</li>
+	<li>
+		<a href="./Pds/pdslist.jsp">자료실</a>
+	</li>
+</ul>
+<!-- 글추가 디테일 업데이트 삭제 -->
+
+<div align="center">
+
+<table border="1" class="type02">
+<col width="70"><col width="600"><col width="150">
+<tr>
+	<th>번호</th><th>제목</th><th>작성자</th>
+</tr>
+
+
+
+
+
+
+<%-- 
+밑에 if문 
+core태그로 했을 때. setAttr로 넣어줘야 사용 가능
+<c:if test="${empty list }"></c:if>
+ --%>
+<%
+
+if(list == null || list.size() == 0){
+	// 글이 하나도 없을 때
+%>
+	<tr>
+		<td colspan="3">작성된 글이 없습니다.</td>	
+	</tr>
+<%	
+}else if(list != null || list.size() != 0){
+	for(int i=0; i<list.size(); i++){
+		BbsDto bbs = list.get(i);
+		if(bbs.getDel() == 0){
+	%>
+	<tr>
+		<th><%=i + 1 %></th>
+		
+		
+		<!-- 제목 --><!-- 제목클릭 -> 디테일로 이동  (글 번호를 알면 됨) this를 통해 얻어오기 위해 class로 잡아준것 -->
+		<td class="seqclick" seq=<%=bbs.getSeq() %> style="padding-left: 10px">
+			<%=arrow(bbs.getDepth()) %>
+			<%=bbs.getTitle() %>
+		</td>
+		
+		<td align="center"><%=bbs.getId() %></td>
+	</tr>	
+	<%	
+		}else{
+	%>
+	<tr>
+		<th><%=i + 1 %></th>
+
+		<td align="center" style="color: #5D5D5D">삭제된 게시물 입니다.</td>
+		
+		<td></td>
+	</tr>	
+	<%		
+		}
+	}
+}
+%>
+</table>
+<form>
+<a href="bbswrite.jsp" id="_write">글쓰기</a>
+<input type="hidden" name="id" value="<%=mem.getId()%>">
+<%
+session.setAttribute("loginId", mem);
+%>
+</form>
+
+<form id="frm" action="bbsSearch.jsp">
+	<table>
+	<tr>
+		<td>
+			<select name="searchList">
+				<option id="nosel">선택</option>
+				<option value="searchTitle">제목</option>
+				<option value="searchContent">내용</option>
+				<option value="searchId">작성자</option>
+			</select>
+		</td>
+		<td>
+			<input type="text" name="searchText" value="" id="_serach">
+		</td>
+		<td>
+			<input type="submit" name="goSearch" value="검색" id="goSearch">
+		</td>
+	</tr>
+	</table>
+</form>
+</div>
+
+<script type="text/javascript">
+$(document).ready(function() {
+	// 마우스를 올렸을 때
+	$(".seqclick").mouseover(function () {
+		$(this).css("background", "#F6F6F6");
+	});
+	// 마우스를 뺐을 때
+	$('.seqclick').mouseout(function() {
+		$(this).css("background", "#ffffff");
+	});
+	// 클릭했을 때
+	$('.seqclick').mousedown(function() {
+		$(this).css("background", "#EAEAEA");
+	});
+	$(".seqclick").click(function() {
+	    alert($(this).attr('seq'));
+	    var seq = $(this).attr('seq');
+	    location.href = "bbsdetail.jsp?seq=" + seq;
+	 });
+});
+
+
+$(document).ready(function() {
+	$("#_main").click(function() {
+		
+	});
+	// 게시판
+	// 마우스를 올렸을 때
+	$("#_main").mouseover(function () {
+		$(this).css("color", "#002D93");
+	});
+	// 마우스를 뺐을 때
+	$('#_main').mouseout(function() {
+		$(this).css("color", "#000000");
+	});
+
+
+$("#_main").mouseover(function () {
+	$("#_main").css("cursor", "pointer");	// 커서가 화살표 모양이 아닌 손가락 모양으로 바뀐다.
+});
+$(".seqclick").mouseover(function () {
+	$(this).css("cursor", "pointer");	// 커서가 화살표 모양이 아닌 손가락 모양으로 바뀐다.
+});
+
+
+
+});
+
+</script>
+
+</body>
+</html>
+
+
+
+
+
+
+
+

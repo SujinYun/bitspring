@@ -1,0 +1,165 @@
+package bit.com.a.controller;
+
+import java.util.Date;
+import java.util.List;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+
+import bit.com.a.model.BbsDto;
+import bit.com.a.model.BbsParam;
+import bit.com.a.model.MemberDto;
+import bit.com.a.service.BitBbsService;
+
+@Controller
+public class BitBbsController {
+
+	private static final Logger logger = LoggerFactory.getLogger(BitBbsController.class);
+	
+	@Autowired
+	BitBbsService bbsService;
+	
+	@RequestMapping(value = "bbslist.do", method= {RequestMethod.GET, RequestMethod.POST})
+	public String bbslist(BbsParam param, Model model) {		
+		logger.info("BitBbsController bbslist() " + new Date());
+		
+		model.addAttribute("doc_title", "글목록");
+		
+		// paging 처리
+		int sn = param.getPageNumber();	// 현재 페이지 넘버 0 1 2
+		int start = sn * param.getRecordCountPerPage() +1;	// start페이지 1	11	21
+		int end = (sn + 1) * param.getRecordCountPerPage();	//			10	20	30
+		
+		param.setStart(start);
+		param.setEnd(end);
+		
+		// list불러옴
+		List<BbsDto> bbslist = bbsService.getBbsList(param);
+//		logger.info("BitBbsController bbslist()1 ");
+		// 글의 총 수
+		int totalRecordCount = bbsService.getBbsCount(param);
+//		logger.info("BitBbsController bbslist()2 ");
+		
+		model.addAttribute("pageNumber", sn);
+		model.addAttribute("pageCountPerScreen", 10);
+		model.addAttribute("recordCountPerPage", param.getRecordCountPerPage());
+		model.addAttribute("totalRecordCount", totalRecordCount);
+		model.addAttribute("bbslist", bbslist);
+		
+		model.addAttribute("s_category",param.getS_category());
+	    model.addAttribute("s_keyword",param.getS_keyword());
+
+		return "bbslist.tiles";
+		
+	}
+	
+	// 글쓰기
+	@RequestMapping(value = "bbswrite.do", method= {RequestMethod.GET, RequestMethod.POST})
+	public String bbswrite(Model model) {
+		logger.info("BitBbsController bbswrite() " + new Date());
+		
+		return "bbswrite.tiles";
+	}
+	
+	// 글쓰기Af
+	@RequestMapping(value = "bbswriteAf.do", method= {RequestMethod.GET, RequestMethod.POST})
+	public String bbswriteAf(BbsDto bbs, Model model) {
+		logger.info("BitBbsController bbswriteAf() " + new Date());
+		
+		boolean b = bbsService.getBbsWrite(bbs);
+		
+		return "redirect:/bbslist.do";
+	}
+	
+	// 디테일
+	@RequestMapping(value = "bbsdetail.do", method= {RequestMethod.GET, RequestMethod.POST})
+	public String bbsdetail(BbsDto bbs, int seq, Model model) {
+		logger.info("BitBbsController bbsdetail() " + new Date());
+		logger.info("seq:" + seq);
+		
+		model.addAttribute("doc_title", bbs.getTitle());
+		
+		BbsDto dto = bbsService.getBbsDetail(seq);
+		boolean b = bbsService.getCount(seq);
+		model.addAttribute("bbs", dto);
+		
+		return "bbsdetail.tiles";
+	}
+	
+	// 답글
+	@RequestMapping(value = "bbsanswer.do", method= {RequestMethod.GET, RequestMethod.POST})
+	public String bbsanswer(BbsDto bbs, int seq, Model model) {
+		logger.info("BitBbsController bbsanswer() " + new Date());
+		logger.info("seq() " + seq);
+		
+		model.addAttribute("seq", seq);
+		
+		return "bbsanswer.tiles";
+	}
+	
+	// 답글Af
+	@RequestMapping(value = "bbsanswerAf.do", method= {RequestMethod.GET, RequestMethod.POST})
+	public String bbsanswerAf(BbsDto bbs, int seq, Model model) {
+		logger.info("BitBbsController bbsanswerAf() " + new Date());
+		logger.info("seq: " + seq);
+		
+		boolean b = bbsService.getBbsanswerInt(seq);
+		boolean b2 = bbsService.getBbsanswerDto(bbs);
+		
+		return "redirect:/bbslist.do";
+	}
+	
+	// 삭제
+	@RequestMapping(value = "bbsdelete.do", method= {RequestMethod.GET, RequestMethod.POST})
+	public String bbsdelete(BbsDto bbs, int seq, Model model) {
+		logger.info("BitBbsController bbsdelete() " + new Date());
+		logger.info("seq: " + seq);
+
+		boolean b = bbsService.getBbsdelete(seq);
+		
+		return "redirect:/bbslist.do";
+	}
+	
+	// 수정
+	@RequestMapping(value = "bbsupdate.do", method= {RequestMethod.GET, RequestMethod.POST})
+	public String bbsupdate(int seq, Model model) {
+		logger.info("BitBbsController bbsupdate() " + new Date());
+		logger.info("seq: " + seq);
+		
+		BbsDto bbs = bbsService.getBbsDetail(seq);
+		model.addAttribute("bbs", bbs);
+		
+		return "bbsupdate.tiles";
+	}
+	
+	// 수정Af
+	@RequestMapping(value = "bbsupdateAf.do", method= {RequestMethod.GET, RequestMethod.POST})
+	public String bbsupdateAf(BbsDto bbs, int seq, Model model) {
+		logger.info("BitBbsController bbsupdateAf() " + new Date());
+		logger.info("seq: " + seq);
+		
+		bbs.setSeq(seq);
+
+		boolean b = bbsService.getBbsupdateAf(bbs);
+		
+		return "redirect:/bbslist.do";
+	}
+	
+}
+
+
+
+
+
+
+
+
+
+
+
+

@@ -1,0 +1,20 @@
+package com.aopex;
+
+import org.springframework.context.support.AbstractApplicationContext;
+import org.springframework.context.support.GenericXmlApplicationContext;
+
+public class mainClass {
+	
+	public static void main(String[] args) {
+		
+		// java에서 xml실행 시 
+		AbstractApplicationContext ctx = new GenericXmlApplicationContext("bean.xml");
+		// java메인함수에서 xml을 실행시켜줌.
+		
+		// bean.xml에서 생성된 객체를 취득
+		Cat mycat = ctx.getBean("myCat", Cat.class);
+		// value값들을 가져옴
+		mycat.catInfo();
+	}
+
+}

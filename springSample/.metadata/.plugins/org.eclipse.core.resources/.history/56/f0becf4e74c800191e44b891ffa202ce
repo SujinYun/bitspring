@@ -1,0 +1,13 @@
+package bit.com.a.dao;
+
+import java.util.List;
+
+import bit.com.a.model.BbsDto;
+
+public interface BitBbsDao {
+
+	public List<BbsDto> getBbsList(); 
+	
+	public boolean getBbsWrite(BbsDto dto);
+	
+}

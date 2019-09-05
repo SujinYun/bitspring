@@ -1,0 +1,105 @@
+package bit.com.a;
+
+import java.util.Date;
+
+import javax.servlet.http.HttpServletRequest;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.ResponseBody;
+
+import bit.com.a.model.MemberDto;
+import bit.com.a.service.BitMemberService;
+
+@Controller
+public class LoginController {
+	
+	private static final Logger logger = LoggerFactory.getLogger(LoginController.class);
+	
+	@Autowired	// 서비스가 생성, 서비스에선 다오가 생성. 서로 연결해주는것
+	private BitMemberService bitMemberService;
+	
+	@RequestMapping(value="login.do", method=RequestMethod.GET)
+	public String bbs() {
+		logger.info("LoginController bbs()");
+
+		return "bbsLogin";	// .jsp
+	}
+	
+	// 회원가입버튼을 눌렀을 때 회원가입view로 이동
+	@RequestMapping(value="account.do", method=RequestMethod.POST)
+	public String bbsAccount() {
+		logger.info("LoginController bbsAccount()");
+
+		return "bbsAccount";	// .jsp
+	}
+	
+	// id체크
+	@ResponseBody
+	@RequestMapping(value="idcheck.do",
+					produces="application/String; charset=utf-8",
+					method= RequestMethod.GET)
+	public String idcheck(String id)throws Exception {
+		logger.info("LoginController idcheck()"+new Date());
+		logger.info("id: " + id);
+		
+		int b = bitMemberService.idcheck(id);
+		logger.info("b: " + b);
+		if(b != 0) {
+			logger.info("이미 등록되어있는 아이디 입니다." + new Date());
+			
+			return "불가";
+		}else {
+			logger.info("사용 가능한 아이디 입니다." + new Date());
+			
+			return "가능";
+		}
+	}
+	
+	// 회원가입
+	@RequestMapping(value="accountAf.do", method= {RequestMethod.POST, RequestMethod.GET})
+	public String accountAf(MemberDto dto, Model model, HttpServletRequest req) throws Exception {
+		logger.info("LoginController accountAf()"+new Date());
+		logger.info(dto.getId());
+		logger.info(dto.getPwd());
+		
+		boolean b = bitMemberService.addmember(dto);
+		if(b) {
+			logger.info("회원가입 성공" + new Date());
+			return "bbsLogin";
+		}else {
+			logger.info("회원가입 실패" + new Date());
+			return "bbsAccount";
+		}
+
+	}
+	
+	
+	// 로그인 id, pwd확인
+	@ResponseBody
+	@RequestMapping(value="loginAf.do",
+					produces="application/String; charset=utf-8",
+					method= RequestMethod.POST)
+	public String loginCheck(MemberDto dto, Model model, HttpServletRequest req)throws Exception {
+		logger.info("LoginController loginCheck()"+new Date());
+		logger.info(dto.toString());
+		
+		int b = bitMemberService.logincheck(dto);
+		if(b == 0) {
+			logger.info("id 또는 비밀번호 오류" + new Date());
+			
+			return "bbsLogin";
+		}else {
+			logger.info("로그인 성공" + new Date());
+			
+			return "redirect:/bbslist.do";
+		}
+	}
+	
+	
+}

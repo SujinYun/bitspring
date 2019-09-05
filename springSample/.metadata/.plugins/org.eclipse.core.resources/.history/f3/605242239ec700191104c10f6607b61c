@@ -1,0 +1,43 @@
+<%@page import="bit.com.a.model.MyClass"%>
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+    pageEncoding="UTF-8"%>
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>hello.jsp</title>
+</head>
+<body>
+
+<h3>hello.jsp</h3>
+
+<%-- 1. scriptlet --%>
+<%
+MyClass cls = (MyClass)request.getAttribute("mycls");
+%>
+number:<%=cls.getNumber() %>
+<br>
+name:<%=cls.getName() %>
+<br><br>
+
+<!-- 1. EL tag -->
+number:${mycls.number }
+<br>
+name:${mycls.name }
+<br><br>
+
+
+<!-- 2 view에서 controller로 가는 것-->
+<form action="inputData.do">
+번호:<input type="text" name="number">
+<br>
+이름:<input type="text" name="name">
+<br>
+<input type="submit" value="전송">
+
+</form>
+
+
+
+</body>
+</html>

@@ -1,0 +1,128 @@
+@charset "UTF-8";
+.nullList{
+	position: relative;top: 130px;left: -183px;padding-bottom: 1500px;
+}
+#back1_red{
+/* 	background-color: red; */width: 256px;height : 1000px;float: left;	position: relative; top: 100px; margin-bottom: 400px;
+}
+#back2_yellow{
+/* 	background-color: yellow; */width: 700px; height : 1300px; float: left; position: relative; left: 90px; top: 100px;
+}
+.middle_box2{
+	width: 250px;height: 200px;background-color: white;border-radius: 4px;float: left;font-family: monospace;
+}
+.move{
+	padding-left: 20px;padding-right: 30px;
+}
+.scheduleArr{
+	padding-left: 200px;padding-top: 50px;width: 500px;float: left;
+}
+#_img1{
+	filter : grayscale(100%);width: auto; height: auto;width: 250px;height: 150px;
+}
+#_img2{
+	width: auto; height: auto;width: 250px;height: 150px;
+}
+#_userList{
+	color: #337ab7;
+}
+#_userList:hover{
+	color: #4C5864;
+}
+#_playlist{
+	color: #4C5864;font-weight: bold;
+}
+.Aplay{
+	color: #04e8ba;font-weight: bold;
+}
+#updateBtn{
+	background-color: #04e8ba;border-radius: 5px;border: none;padding-left: 10px;padding-right: 10px;
+    padding-top: 2px;padding-bottom: 2px;color: #fff;position: relative;left: 167px;
+}
+#_schedule:hover {
+	color: #04e8ba;
+}
+#_schedule {
+	color: #4C4C4C;
+}
+.Anotice{
+	color: #4C4C4C; 
+}
+.Anotice:hover{
+	color: #04e8ba;
+}
+.Aqna{
+	color: #4C4C4C;
+}
+.Aqna:hover{
+	color: #04e8ba;
+}
+#_chart{
+	color:#4c4c4c;
+}
+#_chart:hover{
+	color:#04e8ba;
+}
+#_del{
+	color: #5D5D5D;padding-bottom: 240px;
+}
+.schedule{
+	padding-bottom: 180px;
+}
+.play_ing{
+	padding-left: 20px;padding-right: 30px;width: 250px;height: 150px;
+}
+.playlist{
+	font-family: sans-serif;padding-left: 20px;padding-right: 30px;padding-bottom : 50px;width: 500px;	
+}
+.w3-button{
+	font-family: sans-serif;background-color: #fff;
+}
+.w3-button:hover{
+	background-color: #04e8ba;color: #fff;
+}
+.w3-hide {
+    font-family: sans-serif;padding-left: 30px;
+}
+#about{
+	font-size: x-small;
+}
+#_name{
+	font-size: large;font-weight: bold;position: relative;left: 31px;top: -8px;
+}
+#_introduction{
+	color: gray;
+}
+.out{
+	position: relative;
+    left: 658px;
+    top: 24px;
+    background-color: #e5eaef;
+    color: #4C5864;
+    border-radius: 5px;
+    border: none;
+}
+.listsize{
+	position : relative;
+	left:1px;
+	color: red;
+}
+.idsize{
+	width:1px;
+}
+.frm{
+
+}
+#_bbslist:hover{
+	color : #4C5864;
+}
+#_bbslist{
+	color : #337ab7;
+}
+a{
+	text-decoration:none;
+}
+.ifDel_1{
+	background-color: #c9d2dc;
+    color: #7d7d7d;
+}

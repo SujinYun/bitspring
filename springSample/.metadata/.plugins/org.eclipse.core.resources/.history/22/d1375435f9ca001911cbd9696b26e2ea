@@ -1,0 +1,7 @@
+package bit.com.a.service.impl;
+
+import bit.com.a.service.BitCalService;
+
+public class BitCalendarServiceImpl implements BitCalService {
+
+}

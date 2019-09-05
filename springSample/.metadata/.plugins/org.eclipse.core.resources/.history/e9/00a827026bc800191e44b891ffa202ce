@@ -1,0 +1,15 @@
+package bit.com.a.dao.impl;
+
+import org.apache.ibatis.session.SqlSession;
+import org.springframework.beans.factory.annotation.Autowired;
+
+import bit.com.a.dao.BitBbsDao;
+
+public class BitBbsDaoImpl implements BitBbsDao {
+	
+	@Autowired
+	SqlSession sqlSession;
+
+	String namespace = "Member.";
+	
+}

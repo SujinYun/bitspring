@@ -1,0 +1,87 @@
+package bit.com.a;
+
+import java.util.Date;
+
+import javax.servlet.http.HttpServletRequest;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.ResponseBody;
+
+import bit.com.a.model.MemberDto;
+import bit.com.a.service.BitMemberService;
+import bit.com.a.service.impl.BitMemberServiceImpl;
+
+
+@Controller
+public class BbsController {
+	
+	private static final Logger logger = LoggerFactory.getLogger(BbsController.class);
+	
+	@Autowired	// 서비스가 생성, 서비스에선 다오가 생성. 서로 연결해주는것
+	private BitMemberService bitMemberService;
+	
+	@RequestMapping(value="bbs.do", method=RequestMethod.GET)
+	public String bbs() {
+		logger.info("BbsController bbs()");
+
+		return "bbsLogin";	// .jsp
+	}
+	
+	// 회원가입버튼을 눌렀을 때 회원가입view로 이동
+	@RequestMapping(value="account.do", method=RequestMethod.GET)
+	public String bbsAccount() {
+		logger.info("BbsController bbsAccount()");
+
+		return "bbsAccount";	// .jsp
+	}
+	
+	// id체크
+	@ResponseBody
+	@RequestMapping(value="idcheck.do",
+					produces="application/String; charset=utf-8",
+					method= RequestMethod.GET)
+	public String accounIdCheck(String id)throws Exception {
+		logger.info("BbsController accounIdCheck()"+new Date());
+		logger.info("id" + id);
+		
+		String str = "";
+		
+		int b = bitMemberService.idcheck(id);
+		if(b != 0) {
+			logger.info("이미 등록되어있는 아이디 입니다." + new Date());
+			
+			return "불가";
+		}else {
+			logger.info("사용 가능한 아이디 입니다." + new Date());
+			
+			return "가능";
+		}
+	}
+	
+	// 회원가입
+	@RequestMapping(value="accountAf.do", method=RequestMethod.POST)
+	public String bbsAccountAf(MemberDto dto, Model model, HttpServletRequest req)throws Exception {
+		logger.info("BbsController bbsAccountAf()"+new Date());
+		logger.info(dto.getId());
+		logger.info(dto.getPwd());
+		
+		boolean b = bitMemberService.addmember(dto);
+		if(b) {
+			logger.info("회원가입 성공" + new Date());
+			return "bbsLogin";
+		}else {
+			logger.info("회원가입 실패" + new Date());
+			return "bbsAccount";
+		}
+
+	}
+	
+	
+	
+}

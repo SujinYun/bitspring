@@ -1,0 +1,25 @@
+package bit.com.a.dao.impl;
+
+import java.util.Calendar;
+
+import org.apache.ibatis.session.SqlSession;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Repository;
+
+import bit.com.a.dao.BitCalDao;
+import bit.com.a.model.BbsDto;
+
+@Repository
+public class BitCalDaoImpl implements BitCalDao {
+	
+	@Autowired
+	SqlSession sqlSession;
+	
+	String cal = "Cal.";
+
+	@Override
+	public Calendar getCal(BbsDto bbs) {
+		return sqlSession.selectList(cal+"getCal", bbs);
+	}
+
+}

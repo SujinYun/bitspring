@@ -1,0 +1,127 @@
+package bit.com.a.controller;
+
+import java.util.Calendar;
+import java.util.Date;
+import java.util.List;
+
+import javax.servlet.http.HttpServletRequest;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+
+import bit.com.a.model.BbsDto;
+import bit.com.a.model.CalendarDto;
+import bit.com.a.model.MemberDto;
+import bit.com.a.service.BitCalService;
+
+@Controller
+public class BitCalController {
+	
+	private static final Logger logger = LoggerFactory.getLogger(BitCalController.class);
+	
+	@Autowired
+	BitCalService calService;
+
+	public String two(String msg){
+		return msg.trim().length()<2?"0"+msg:msg.trim();
+	}
+	
+	// calendar 년, 월, 아이디
+	@RequestMapping(value = "calendar.do", method= {RequestMethod.GET, RequestMethod.POST})
+	public String bbscalendar(Model model, HttpServletRequest req) {
+		logger.info("BitCalController calendar() " + new Date());
+		
+		MemberDto mem = (MemberDto)req.getSession().getAttribute("login");
+		logger.info("BitCalController calendar() mem: " + mem.toString());
+		
+		// 일정리스트
+		List<CalendarDto> callist = calService.getCal(mem);
+		model.addAttribute("callist", callist);
+		model.addAttribute("mem", mem);
+		
+
+		return "calendar.tiles";
+	}
+	
+	// 글쓰기
+	@RequestMapping(value = "calwrite.do", method= {RequestMethod.GET, RequestMethod.POST})
+	public String calwrite(MemberDto mem, String id, Model model) {
+		logger.info("BitCalController calwrite() " + new Date());
+
+		model.addAttribute("mem", mem);
+		
+		return "calwrite.tiles";
+	}
+	
+	// 글쓰기Af
+	@RequestMapping(value = "calwriteAf.do", method= {RequestMethod.GET, RequestMethod.POST})
+	public String calwriteAf(CalendarDto cal, MemberDto mem, String id, Model model, HttpServletRequest req) {
+		logger.info("BitCalController calwriteAf() " + new Date());
+
+		model.addAttribute("mem", mem);
+		String year = req.getParameter("year");
+		String month = req.getParameter("month");
+		String day = req.getParameter("day");
+		String h = req.getParameter("h");
+		String m = req.getParameter("m");
+		String rdate = year+two(month)+two(day)+two(h)+two(m);
+		cal.setRdate(rdate);
+		
+		
+		logger.info("calwriteAf() rdate : " + rdate + " mem.getid() : " + mem.getId());
+		
+		boolean b = calService.getwriteAf(cal);
+		
+		
+		return "redirect:/calendar.do";
+	}
+	
+	// detail
+	@RequestMapping(value = "caldetail.do", method= {RequestMethod.GET, RequestMethod.POST})
+	public String caldetail(int seq, Model model, HttpServletRequest req) {
+		logger.info("BitCalController caldetail() " + new Date());
+		logger.info("BitCalController caldetail() seq: " + seq);
+
+	//	int seq = (Integer)req.getAttribute("seq");
+		CalendarDto cal = calService.getdetail(seq);
+		
+		model.addAttribute("cal", cal);
+		
+		return "caldetail.tiles";
+	}
+	
+	// 수정
+	@RequestMapping(value = "calupdate.do", method= {RequestMethod.GET, RequestMethod.POST})
+	public String calupdate(int seq, Model model, HttpServletRequest req) {
+		logger.info("BitCalController calupdate() " + new Date());
+		
+		CalendarDto calDto = calService.getdetail(seq);
+		logger.info("cal.toString : " + calDto.toString());
+		
+		model.addAttribute("calDto", calDto);
+		
+		return "calupdate.tiles";
+	}
+	
+	// 수정Af
+	@RequestMapping(value = "calupdateAf.do", method= {RequestMethod.GET, RequestMethod.POST})
+	public String calupdateAf(CalendarDto calDto, Model model, HttpServletRequest req) {
+		logger.info("BitCalController calupdateAf() " + new Date());
+		
+		boolean b = calService.getupdateAf(calDto);
+		
+		model.addAttribute("seq", seq);
+		
+		return "redirect:/caldetail.do";
+	}
+	
+
+	
+	
+	
+}

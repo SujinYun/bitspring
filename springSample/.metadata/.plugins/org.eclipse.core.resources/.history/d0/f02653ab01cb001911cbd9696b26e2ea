@@ -1,0 +1,297 @@
+<%@page import="bit.com.a.model.CalendarDto"%>
+<%@page import="java.util.Calendar"%>
+<%@page import="java.util.List"%>
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+    pageEncoding="UTF-8"%>
+
+<%
+List<CalendarDto> callist = (List<CalendarDto>)request.getAttribute("cal");
+System.out.println("callist : " + callist.size());
+
+%>
+
+<%!
+// 자바용 nvl함수
+public boolean nvl(String msg){
+	return msg == null || msg.trim().equals("")?true:false;
+}
+
+// 날짜를 클릭하면, 그날의 일정이 모두 보이게 하는 callist.jsp로 이동하는 함수
+public String callist(int year, int month, int day){
+	String str = "";
+	
+	str += String.format("<a href='%s?year=%d&month=%d&day=%d'>", 
+								"callist.jsp", year, month, day);
+	
+	str += String.format("%2d", day);	// %2d : 숫자 표현할 때 2칸으로 잡아라
+	str += "</a>";
+
+	/*
+	<a href='callist.jsp?year=2019&menth=07&day=31'>31</a>
+	*/
+	return str;
+}
+
+// 일정을 기입하기 위해서 pen이미지를 클릭하면, calwrite.jsp로 이동시키는 함수
+public String showPen(int year, int month, int day){
+	String str = "";
+	
+	String image = "<img src='image/pen.gif'>";
+	
+	str = String.format("<a href='%s?year=%d&month=%d&day=%d'>%s</a>", 
+									"calwrite.do", year, month, day, image);
+	
+	/*
+		<a href='calwrite.jsp?year=2019&month=07&day=31'>
+			<img src='image/pen.gif'>
+		</a>
+	*/
+	return str;
+}
+
+// 1 -> 01		2019731 -> 20190731
+public String two(String msg){
+	return msg.trim().length() < 2?"0"+msg.trim():msg.trim();
+}
+
+// 각 날짜별로 테이블을 생성하는 함수
+public String makeTable(int year, int month, int day, List<CalendarDto> list){
+	String str = "";
+	// 20190731
+	String dates = (year + "") + two(month + "") + two(day + "");
+	
+	str += "<table>";
+	str += "<col width='98'>";
+	
+	for(CalendarDto dto : list){
+		if(dto.getRdate().substring(0, 8).equals(dates)){
+			str += "<tr bgcolor='yellow'>";
+			str += "<td>";
+			
+			str += "<a href='caldetail.jsp?seq=" + dto.getSeq() + "'>";
+			
+			str += "<font style='font-size:6px;color:red'>";
+			
+			str += dot3(dto.getTitle());
+			System.out.println("dto.getTitle()" + dto.getTitle());
+			
+			str += "</font>";
+			
+			str += "</a>";
+			
+			str += "</td>";		
+			str += "</tr>";
+		}
+	}
+	
+	str += "</table>";
+	
+	return str;
+}
+
+// 제목이 너무 길면 제목+...으로 처리하는 함수 	예) 일요일에 산업기사 시험이 있음 -> 일요일에 산업기....
+public String dot3(String msg){
+	String str = "";
+	if(msg.length() >= 10){
+		str = msg.substring(0,10);	// 0에서 9까지
+		str += "...";
+	}else{
+		str = msg.trim();
+	}
+	return str;
+}
+
+
+%>
+
+
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>calendar.jsp</title>
+<style type="text/css">
+body{
+	font-family: Times New Roman;
+}
+table{
+	border: groove;
+	border-collapse: collapse;
+}
+.day7{
+	color: #747474;
+}
+.main{
+	font-size: 40px;
+}
+a:link{
+	color: gray;
+}
+a:visited{
+	color: gray;
+}
+
+a:hover {
+	color: #F29661;
+}
+a:active {
+	color: #FFFFFF;
+}
+.ymd{
+	position: relative;
+    top: 30px;
+    right: -8px;
+}
+.arrow{
+	position: relative;
+	top: 26px;
+}
+#_rArrow2, #_rArrow1{
+	position: relative;
+	left: 10px;
+}
+
+</style>
+</head>
+<body>
+
+<%
+Calendar cal = Calendar.getInstance();
+cal.set(Calendar.DATE, 1);
+
+String syear = request.getParameter("year");
+String smonth = request.getParameter("month");
+
+int year = cal.get(Calendar.YEAR);
+if(nvl(syear) == false){	// 파라미터가 넘어온 경우
+	// syear가 비어있지 않다면
+	year = Integer.parseInt(syear);
+}
+
+int month = cal.get(Calendar.MONTH) + 1;	//0부터 시작하기 때문에 +1을 해준다
+if(nvl(smonth) == false){
+	month = Integer.parseInt(smonth);
+}
+
+if(month < 1){
+	month = 12;
+	year--;
+}
+
+if(month > 12){
+	month = 1;
+	year++;
+}
+
+cal.set(year, month-1, 1);		// 연, 월, 일 셋팅완료
+
+// 요일
+int dayOfWeek = cal.get(Calendar.DAY_OF_WEEK);
+
+//	<<		year--
+String pp = String.format("<a class='arrow' href='%s?year=%d&month=%d'>" 
+						+ "<img src='image/arrow_left2.png'></a>",
+						"calendar.jsp", year-1, month);
+
+//	<		month--
+String p = String.format("<a class='arrow' href='%s?year=%d&month=%d'>" 
+						+ "<img src='image/arrow_left1.png'></a>",
+						"calendar.jsp", year, month-1);
+
+// 	>		month++
+String n = String.format("<a id='_rArrow1' class='arrow' href='%s?year=%d&month=%d'>" 
+						+ "<img src='image/arrow_right1.png'></a>",
+						"calendar.jsp", year, month+1);
+
+//	>>		year++
+String nn = String.format("<a id='_rArrow2' class='arrow' href='%s?year=%d&month=%d'>" 
+						+ "<img src='image/arrow_right2.png'></a>",
+						"calendar.jsp", year+1, month);
+
+/* MemberDto user = (MemberDto)session.getAttribute("login");
+
+iCalendar dao = CalendarDao.getInstance();
+List<CalendarDto> list = dao.getCalendarList(user.getId(), year + two(month + "")); */
+%>
+
+<div align="center">
+
+<table border="1">
+<col width="100"><col width="100"><col width="100"><col width="100">
+<col width="100"><col width="100"><col width="100">
+
+<tr height="100">
+	<td colspan="7" align="center">
+		<%=pp %>&nbsp;<%=p %>
+		<font color="gray" style="font-size: 28px" class="ymd">
+			<%=String.format("%d년&nbsp;&nbsp;%d월", year, month) %>		
+		</font>
+		<%=n %>&nbsp;<%=nn %>
+	</td>
+</tr>
+
+<tr height="10" class="day7">
+	<td align="center" style="color: red;">일</td>
+	<td align="center">월</td>
+	<td align="center">화</td>
+	<td align="center">수</td>
+	<td align="center">목</td>
+	<td align="center">금</td>
+	<td align="center">토</td>
+</tr>
+
+<tr height="100" align="left" valign="top">	<!-- 좌측 상단부터 -->
+<%
+// 위쪽 빈칸
+for(int i = 1; i<dayOfWeek; i++){
+	%>
+	<td>&nbsp;</td>
+	<%
+}
+%>
+
+<%--날짜 --%>
+<%
+// lastDay : 마지막 날짜
+int lastDay = cal.getActualMaximum(Calendar.DAY_OF_MONTH);
+for(int i =1; i<=lastDay; i++){
+	%>
+	<td><%=callist(year, month, i) %>&nbsp;<%=showPen(year, month, i) %>
+		<%-- <%=makeTable(year, month, i, list) %> --%>
+		 <%-- <input type="hidden" name="seq" value="<%=list.get(i)%>">  --%>
+	</td>
+	<%
+	if((i + dayOfWeek -1) % 7 == 0 && i != lastDay){
+		%>
+		</tr>
+		<tr height="100" align="left" valign="top">
+		<%
+	}
+}
+
+%>
+
+<%-- 밑 칸 --%>
+<%
+for(int i=0; i<(7 - (dayOfWeek + lastDay -1)% 7 )% 7; i++){
+	%>
+	<td>&nbsp;</td>
+	<%
+}
+
+%>
+
+</table>
+
+
+
+
+</div>
+</body>
+</html>
+
+
+
+
+
+

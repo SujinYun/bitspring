@@ -1,0 +1,25 @@
+package bit.com.a.service.impl;
+
+import java.util.Calendar;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import bit.com.a.dao.BitCalDao;
+import bit.com.a.model.BbsDto;
+import bit.com.a.service.BitCalService;
+
+@Service
+public class BitCalServiceImpl implements BitCalService {
+	
+	@Autowired
+	private BitCalDao bitCalDao;
+
+	@Override
+	public Calendar getCal(BbsDto bbs) {
+		return bitCalDao.getCal(bbs);
+	}
+	
+	
+
+}

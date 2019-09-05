@@ -1,0 +1,327 @@
+package dao;
+
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.util.ArrayList;
+import java.util.List;
+
+import db.DBClose;
+import db.DBConnection;
+import dto.BbsDto;
+import dto.CalendarDto;
+
+public class CalendarDao implements iCalendar {
+
+	private static CalendarDao dao = new CalendarDao();
+	
+	public CalendarDao() {
+	}
+	
+	public static CalendarDao getInstance() {
+		return dao;
+	}
+	
+	@Override
+	public List<CalendarDto> getCalendarLis() {
+		String sql = " SELECT SEQ, ID, TITLE, CONTENT, RDATE, WDATE "
+				+ " FROM CALENDAR ";
+		
+		Connection conn = null;
+		PreparedStatement psmt = null;
+		ResultSet rs = null;
+		
+		List<CalendarDto> list = new ArrayList<CalendarDto>();
+		
+
+			try {
+				conn = DBConnection.getConnection();
+				System.out.println("1/6 getCalendarLis() suc");	// getconnect얻어오는것을 성공함
+				psmt = conn.prepareStatement(sql);
+				System.out.println("2/6 getCalendarLis() suc");
+				
+				rs = psmt.executeQuery();
+				System.out.println("3/6 getCalendarLis() suc");
+				
+				//while문에서 select결과들을 list에 넣어줌
+				while(rs.next()) {
+					int i = 1;
+					CalendarDto dto = new CalendarDto(rs.getInt(i++),
+														rs.getString(i++), 
+														rs.getString(i++), 
+														rs.getString(i++), 
+														rs.getString(i++), 
+														rs.getString(i++));		
+					list.add(dto);
+				}
+				System.out.println("4/6 getCalendarLis() suc");
+
+			
+			
+		} catch (Exception e) {
+			System.out.println("getCalendarLis() fail	 " + e.getMessage());
+			e.printStackTrace();
+		} finally {
+			DBClose.close(conn, psmt, rs);
+		}
+		
+		
+		return list;
+	}
+
+	public List<CalendarDto> getCalendarList(String id, String yyyyMM){
+		
+		String sql = " SELECT SEQ, ID, TITLE, CONTENT, RDATE, WDATE "
+				+ " FROM(SELECT ROW_NUMBER() OVER(PARTITION BY SUBSTR(RDATE, 1, 8) ORDER BY RDATE ASC) RNUM, "
+						+ " SEQ, ID, TITLE, CONTENT, RDATE, WDATE "
+						+ " FROM CALENDAR "
+						+ " WHERE ID=? AND SUBSTR(RDATE, 1, 6)=?) "
+				 + " WHERE RNUM BETWEEN 1 AND 5 ";
+		
+		Connection conn = null;
+		PreparedStatement psmt = null;
+		ResultSet rs = null;
+		
+		List<CalendarDto> list = new ArrayList<CalendarDto>();
+		
+		try {
+			conn = DBConnection.getConnection();
+			System.out.println("1/6 getCalendarList suc");
+			
+			psmt = conn.prepareStatement(sql);
+			psmt.setString(1, id);
+			psmt.setString(2, yyyyMM.trim());
+			System.out.println("2/6 getCalendarList suc");
+			
+			rs = psmt.executeQuery();
+			System.out.println("3/6 getCalendarList suc");
+			
+			while(rs.next()) {
+				int i = 1;
+				CalendarDto dto = new CalendarDto(rs.getInt(i++), 
+												  rs.getString(i++), 
+												  rs.getString(i++), 
+												  rs.getString(i++), 
+												  rs.getString(i++), 
+												  rs.getString(i++));
+				
+				list.add(dto);		
+			}
+			System.out.println("4/6 getCalendarList suc");
+			
+		} catch (Exception e) {
+			System.out.println("getCalendarList fail");
+			e.printStackTrace();
+		}finally {
+			DBClose.close(conn, psmt, rs);
+		}
+		
+		return list;
+	}
+
+	@Override
+	public boolean getCalendarWrite(CalendarDto dto) {
+		String sql = " INSERT INTO CALENDAR "
+				+ "	(SEQ, ID, TITLE, CONTENT, RDATE, WDATE) "
+				+ "	VALUES(SEQ_CAL.NEXTVAL,?, ?, ?, ?, SYSDATE) ";
+
+		 int count = 0;
+	      
+	      Connection conn = null;
+	      PreparedStatement psmt = null;
+	      
+	      try {
+	         conn = DBConnection.getConnection();
+	         System.out.println("1/6 getCalendarWrite suc");
+	         psmt = conn.prepareStatement(sql);
+	         
+	         psmt.setString(1, dto.getId());
+	         psmt.setString(2, dto.getTitle());
+	         psmt.setString(3, dto.getContent());
+	         psmt.setString(4, dto.getRdate());
+	         System.out.println("2/6 getCalendarWrite suc");
+	         
+	         count = psmt.executeUpdate();   
+	         System.out.println("3/6 getCalendarWrite suc");
+	         
+	      } catch (Exception e) {
+	    	 System.out.println("getCalendarWrite fail");
+	         e.printStackTrace();
+	      } finally {
+	         
+	         DBClose.close(conn, psmt, null);         
+	      }
+	            
+	      return count>0?true:false;
+	}
+
+	@Override
+	public CalendarDto getCaldetail(int seq) {
+		String sql = " SELECT SEQ, ID, TITLE, CONTENT, RDATE, WDATE "
+				+ " FROM CALENDAR "
+				+ "	WHERE SEQ=? ";
+		
+		Connection conn = null;
+		PreparedStatement psmt = null;
+		ResultSet rs = null;
+
+		CalendarDto dto = null;
+		
+			try {
+				conn = DBConnection.getConnection();
+				System.out.println("1/6 getCaldetail suc");	// getconnect얻어오는것을 성공함
+				psmt = conn.prepareStatement(sql);
+				psmt.setInt(1, seq);
+				System.out.println("2/6 getCaldetail suc");
+				
+				rs = psmt.executeQuery();
+				System.out.println("3/6 getCaldetail suc");
+				
+				//while문에서 select결과들을 list에 넣어줌
+				while(rs.next()) {
+					int i = 1;
+									dto = new CalendarDto(rs.getInt(i++),
+														rs.getString(i++), 
+														rs.getString(i++), 
+														rs.getString(i++), 
+														rs.getString(i++), 
+														rs.getString(i++));		
+					
+				}
+				System.out.println("4/6 getCaldetail suc");
+
+		} catch (Exception e) {
+			System.out.println("getCaldetail fail	 " + e.getMessage());
+			e.printStackTrace();
+		} finally {
+			DBClose.close(conn, psmt, rs);
+		}
+		
+		
+		return dto;
+
+	}
+
+	@Override
+	public boolean getCalUpdate(int seq, String title, String content) {
+		String sql = " UPDATE CALENDAR "
+				+ " SET TITLE=?, CONTENT=? "
+				+ " WHERE SEQ=? ";
+		
+		Connection conn = null;
+		PreparedStatement psmt = null;
+		int count=0;
+		
+		try {
+			conn = DBConnection.getConnection();
+			System.out.println("1/6 getCalUpdate suc");
+			
+			psmt=conn.prepareStatement(sql);
+			psmt.setString(1, title);
+			psmt.setString(2, content);
+			psmt.setInt(3, seq);
+			System.out.println("2/6 getCalUpdate suc");
+			
+			count = psmt.executeUpdate();
+			System.out.println("3/6 getCalUpdate suc");
+			
+		} catch (Exception e) {
+			System.out.println("getCalUpdate fail");
+			e.printStackTrace();
+		}
+		
+		return count>0 ? true:false;
+	
+	}
+
+	@Override
+	public boolean getCalDel(int seq) {
+		String sql = " DELETE " 
+					+" FROM CALENDAR "
+					+" WHERE SEQ=? ";
+		
+		Connection conn = null;
+		PreparedStatement psmt = null;
+		int count=0;
+		
+		try {
+			conn = DBConnection.getConnection();
+			System.out.println("1/6 getCalDel suc");
+			
+			psmt=conn.prepareStatement(sql);
+			psmt.setInt(1, seq);
+			System.out.println("2/6 getCalDel suc");
+			
+			count = psmt.executeUpdate();
+			System.out.println("3/6 getCalDel suc");
+			
+		} catch (Exception e) {
+			System.out.println("getCalDel fail");
+			e.printStackTrace();
+		}
+		
+		return count>0 ? true:false;
+	}
+
+	@Override
+	public List<CalendarDto> getCalDayList(String rdate) {
+		
+		String sql = " SELECT SEQ, ID, TITLE, CONTENT, RDATE, WDATE "
+				+ " FROM CALENDAR "
+				+ " WHERE RDATE=? ";
+		
+		Connection conn = null;
+		PreparedStatement psmt = null;
+		ResultSet rs = null;
+		
+		List<CalendarDto> list = new ArrayList<CalendarDto>();
+		
+
+			try {
+				conn = DBConnection.getConnection();
+				System.out.println("1/6 getCalDayList suc");	// getconnect얻어오는것을 성공함
+				psmt = conn.prepareStatement(sql);
+				psmt.setString(1, rdate);
+				System.out.println("2/6 getCalDayList suc");
+				
+				rs = psmt.executeQuery();
+				System.out.println("3/6 getCalDayList suc");
+				
+				//while문에서 select결과들을 list에 넣어줌
+				while(rs.next()) {
+					int i = 1;
+					CalendarDto dto = new CalendarDto(rs.getInt(i++),
+														rs.getString(i++), 
+														rs.getString(i++), 
+														rs.getString(i++), 
+														rs.getString(i++), 
+														rs.getString(i++));		
+					list.add(dto);
+				}
+				System.out.println("4/6 getCalDayList suc");
+
+			
+			
+		} catch (Exception e) {
+			System.out.println("getCalDayList fail	 " + e.getMessage());
+			e.printStackTrace();
+		} finally {
+			DBClose.close(conn, psmt, rs);
+		}
+		
+		
+		return list;
+
+	}
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+}

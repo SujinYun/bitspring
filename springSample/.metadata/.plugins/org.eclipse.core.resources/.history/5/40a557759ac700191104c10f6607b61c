@@ -1,0 +1,38 @@
+<%@page import="bit.com.a.model.MyClass"%>
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+    pageEncoding="UTF-8"%>
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>hello.jsp</title>
+</head>
+<body>
+
+<h3>hello.jsp</h3>
+
+<%-- 1. scriptlet --%>
+<%
+MyClass cls = (MyClass)request.getAttribute("mycls");
+%>
+number:<%=cls.getNumber() %>
+<br>
+name:<%=cls.getName() %>
+<br><br>
+
+<!-- 1. EL tag -->
+number:${mycls.number }
+<br>
+name:${mycls.name }
+
+
+
+<!-- 2 -->
+<form action="inputData">
+
+</form>
+
+
+
+</body>
+</html>

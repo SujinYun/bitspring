@@ -1,0 +1,10 @@
+package com.aopex;
+
+public class mainClass {
+	
+	public static void main(String[] args) {
+		
+		// java에서 xml실행 시 
+	}
+
+}

@@ -1,0 +1,15 @@
+package bit.com.a.model;
+
+import java.io.Serializable;
+
+public class MyData implements Serializable {
+
+	private String name;
+	private String tel;
+	private String email;
+	private String birth;
+	
+	public MyData() {
+	}
+	
+}

@@ -1,0 +1,13 @@
+package bit.com.a.dao;
+
+import java.util.Calendar;
+
+import bit.com.a.model.BbsDto;
+
+public interface BitCalDao {
+	
+	// calendar
+	public Calendar getCal(BbsDto bbs);
+
+
+}

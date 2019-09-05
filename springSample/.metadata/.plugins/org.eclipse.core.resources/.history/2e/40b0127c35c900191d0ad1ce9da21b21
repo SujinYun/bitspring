@@ -1,0 +1,5 @@
+package bit.com.a.aop;
+
+public class LogAop {
+
+}

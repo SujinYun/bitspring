@@ -1,0 +1,127 @@
+<%@page import="bit.com.a.model.MyClass"%>
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+    pageEncoding="UTF-8"%>
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>hello.jsp</title>
+<script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
+
+</head>
+<body>
+
+<h3>hello.jsp</h3>
+
+<%-- 1. scriptlet --%>
+<%
+MyClass cls = (MyClass)request.getAttribute("mycls");
+%>
+number:<%=cls.getNumber() %>
+<br>
+name:<%=cls.getName() %>
+<br><br>
+
+<!-- 1. EL tag -->
+number:${mycls.number }
+<br>
+name:${mycls.name }
+<br><br>
+
+
+<!-- 2 view에서 controller로 가는 것-->
+<form action="inputData.do">
+번호:<input type="text" name="number">
+<br>
+이름:<input type="text" name="name">
+<br>
+<input type="submit" value="전송">
+</form>
+
+<br><br>
+
+<!-- 3 -->
+<form action="move.do">
+<input type="submit" value="move">
+</form>
+
+<br><br>
+
+<!-- 4. Ajax -->
+<form method="get">
+아이디:<input type="text" id="checkid">
+<button type="button" id="_check" onclick="idcheck()">id체크</button>
+
+</form>
+
+<script type="text/javascript">
+function idcheck() {
+// 	alert("idcheck()");
+	$.ajax({
+		url:"idcheck.do",
+		type:"get",
+		data:"id=" + $("#checkid").val(),
+		success:function(data){
+		//	alert("success");
+			alert(data);
+		},
+		error:function(r, s, err){
+			alert("error");
+		}
+	});
+}
+</script>
+
+<br><br>
+
+<!-- 5 -->
+<form method="post">
+이름:<input type="text" id="_name"><br>
+전화:<input type="text" id="_phone"><br>
+이메일:<input type="text" id="_email"><br>
+생년월일:<input type="text" id="_birth"><br>
+<button type="button" id="account">account</button>
+</form>
+
+<script type="text/javascript">
+$(document).ready(function(){
+	
+	$("#account").click(function(){
+// 		alert("account click");
+		
+		var mydata  = {
+				name:$("#_name").val(),
+				tel:$("#_phone").val(),
+				email:$("#_email").val(),
+				birth:$("#_birth").val(),
+		};
+		
+		$.ajax({
+			url:"account.do",
+			data:mydata,
+			type:"post",
+			dataType:'json',			// 보내는 데이터
+			async:true,
+			success:function(resp){
+			//	alert("success");		// 받는 데이터(Map)
+				alert(resp.msg);
+				alert(resp.data);
+			},
+			error:function(){
+				alert("error");
+			}
+		});
+	});
+});
+</script>
+
+<br><br>
+
+<!-- 6 -->
+
+
+
+
+
+</body>
+</html>
