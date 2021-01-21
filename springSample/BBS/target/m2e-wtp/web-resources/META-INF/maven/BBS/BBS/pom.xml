@@ -52,7 +52,7 @@
 	<dependency>
 	    <groupId>com.fasterxml.jackson.core</groupId>
 	    <artifactId>jackson-databind</artifactId>
-	    <version>2.9.8</version> <!-- 에러날 때 버전 체크 -->
+	    <version>2.9.10.7</version> <!-- 에러날 때 버전 체크 -->
 	</dependency>
 	
 	</dependencies>
